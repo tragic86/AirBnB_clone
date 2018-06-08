@@ -1,8 +1,11 @@
 #!/usr/bin.python3
+""" Admin console for Holberton BnB project """
 import cmd, sys, shlex
 from models.base_model import BaseModel
 
+
 class HBNBCommand(cmd.Cmd):
+	''' Command Line interface for HBNB '''
 	prompt = '(hbnb) '
 
 	def do_echo(self, arg):
