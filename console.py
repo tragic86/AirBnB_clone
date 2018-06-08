@@ -15,13 +15,48 @@ class HBNBCommand(cmd.Cmd):
 			Usage: create <classname>
 		'''
 		argv = HBNBCommand.parse(arg)
-		valid = HBNBCommand.checkargs(1, argv)
-		if valid == 0:
-			return
+		if HBNBCommand.checkargs(1, argv):
+			constructor = argv[0] + '()'
+			instance = eval(constructor)
+			print(instance)
 
-		constructor = argv[0] + '()'
-		instance = eval(constructor)
-		print(instance)
+	def do_show(self, arg):
+		'''Print string rep of an instance
+
+		   Usage: show <classname> <id>
+		'''
+		argv = HBNBCommand.parse(arg)
+		if HBNBCommand.checkargs(2, argv):
+			## search database for instance
+			print("show: to be implemented")
+			pass
+
+	def do_destroy(self, arg):
+		'''Delete an instance
+
+		   Usage: delete <classname> <id>
+		'''
+		argv = HBNBCommand.parse(arg)
+		if HBNBCommand.checkargs(2, argv):
+			## delete instance from database
+			print("destroy: to be implemented")
+			pass
+
+	def do_all(self, arg):
+		'''Show all instances
+
+		   Usage: all | all <classname>
+		'''
+		argv = HBNBCommand.parse(arg)
+		if len(argv) == 1:
+			valid = HBNBCommand.checkargs(1, argv)
+		else:
+			valid = 1
+		if valid:
+			# print everything of specific class
+			# or print everything of all classes
+			print("all: to be implemented")
+			pass
 
 	def do_EOF(self, arg):
 		'''Represents end of file'''
