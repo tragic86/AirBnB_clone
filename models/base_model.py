@@ -3,6 +3,7 @@
 import datetime
 import json
 import uuid
+import models.engine
 
 class BaseModel:
     """initializes the Base method

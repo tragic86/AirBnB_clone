@@ -2,6 +2,7 @@
 """ Admin console for Holberton BnB project """
 import cmd, sys, shlex
 from models.base_model import BaseModel
+from models.engine import storage
 
 
 class HBNBCommand(cmd.Cmd):
