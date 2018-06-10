@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-""" Base module for Holberton BnB """
+""" Base module for Holberton BnB
+ """
 import datetime
 import json
 import uuid
@@ -7,15 +8,19 @@ import models.engine
 
 class BaseModel:
     """initializes the Base method
-    Args:
+    Args: init, to_dict, __str__, save 
     """
 
-    def __init__(self, id=None):
+    def __init__(self, *args, **kwargs):
+        """init method for base_model"""
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
 
     def to_dict(self):
+        """adjust format used by dict to use a string form of datetime with
+        isoformat, add class = class name
+        """
         self.__dict__['updated_at'] = str(self.updated_at.isoformat())
         self.__dict__['created_at'] = str(self.created_at.isoformat())
         self.__dict__['__class__'] = self.__class__.__name__
@@ -28,4 +33,5 @@ class BaseModel:
                  self.__dict__))
 
     def save(self):
+        """update updated_at time and date"""
         self.updated_at = datetime.datetime.now()
