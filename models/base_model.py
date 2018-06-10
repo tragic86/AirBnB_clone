@@ -13,17 +13,19 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """init method for base_model"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        if not (kwargs):
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
-
-        for key, value in kwargs.items():
-            if key == "updated_at" or key == "created_at":
-                value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
-#            if key == "__class__":
-#                value = class(value)
-            setattr(self, key, value)
+        else:
+            for key, value in kwargs.items():
+                if key == "updated_at" or key == "created_at":
+                    value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key == "__class__":
+                    pass
+                else:
+                    setattr(self, key, value)
 
 
     def to_dict(self):
