@@ -8,7 +8,7 @@ import models.engine
 
 class BaseModel:
     """initializes the Base method
-    Args: init, to_dict, __str__, save 
+    Args: init, to_dict, __str__, save
     """
 
     def __init__(self, *args, **kwargs):
@@ -16,6 +16,15 @@ class BaseModel:
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
+
+
+        for key, value in kwargs.items():
+            if key == "updated_at" or key == "created_at":
+                value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+#            if key == "__class__":
+#                value = class(value)
+            setattr(self, key, value)
+
 
     def to_dict(self):
         """adjust format used by dict to use a string form of datetime with
