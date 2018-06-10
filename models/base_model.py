@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-""" Base module for Holberton BnB """
+""" Base module for Holberton BnB
+ """
 import datetime
 import json
 import uuid
@@ -7,35 +8,34 @@ import models.engine
 
 class BaseModel:
     """initializes the Base method
-    Args:
+    Args: init, to_dict, __str__, save
     """
 
     def __init__(self, *args, **kwargs):
+        """init method for base_model"""
+        if not (kwargs):
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
-        attrs = ['id', 'created_at', 'updated_at']
-        defaults = [str(uuid.uuid4()), 
-                  datetime.datetime.now(), 
-                  datetime.datetime.now()]
-
-        for a, v in zip(attrs, defaults):
-            if a in kwargs:
-                if a == 'created_at' or a == 'updated_at':
-                    val = datetime.strptime(kwargs[a], datetime.isoformat())
+        else:
+            for key, value in kwargs.items():
+                if key == "updated_at" or key == "created_at":
+                    value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key == "__class__":
+                    pass
                 else:
-                    val = kwargs[a]
-                setattr(self, a, val)
-            else:
-                setattr(self, a, v)
+                    setattr(self, key, value)
+
 
     def to_dict(self):
+        """adjust format used by dict to use a string form of datetime with
+        isoformat, add class = class name
+        """
         self.__dict__['updated_at'] = str(self.updated_at.isoformat())
         self.__dict__['created_at'] = str(self.created_at.isoformat())
         self.__dict__['__class__'] = self.__class__.__name__
         return self.__dict__
-
-#       @updated_at.setter
-#       def save(self):
-#           self.updated_at = datetime.datetime.now()
 
     def __str__(self):
         """override the string displayed by __str__ method"""
@@ -43,11 +43,6 @@ class BaseModel:
                 (self.__class__.__name__, self.id,
                  self.__dict__))
 
-
-
-def test():
-    h = Base()
-    print(h)
-    print()
-if __name__ == '__main__':
-    test()
+    def save(self):
+        """update updated_at time and date"""
+        self.updated_at = datetime.datetime.now()
