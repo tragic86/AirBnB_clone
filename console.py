@@ -1,124 +1,49 @@
-#!/usr/bin.python3
-""" Admin console for Holberton BnB project """
-import cmd, sys, shlex
-from models.base_model import BaseModel
-from models.engine import storage
-
+#!/usr/bin/python3
+import cmd
 
 class HBNBCommand(cmd.Cmd):
-	''' Command Line interface for HBNB '''
-	prompt = '(hbnb) '
 
-	def do_echo(self, arg):
-		'''Simply echos back the argument'''
-		print(HBNBCommand.parse(arg))
+    prompt = '(hbnb)'
+    def do_all(self, args):
+        """print all string representation of all instances based on
+        or not on the clas name"""
 
-	def do_create(self, arg):
-		'''Create new instance of a class
+    def do_cmd(self, args):
+        """type \"help\" followed by a command for more info"""
+        pass
 
-			Usage: create <classname>
-		'''
-		argv = HBNBCommand.parse(arg)
-		if HBNBCommand.checkargs(1, argv):
-			constructor = argv[0] + '()'
-			instance = eval(constructor)
-			print(instance)
+    def do_create(self, args):
+        """Usage: (hbnb) create BaseModel
+        create a new instance of BaseModel, saves it to JSON and prints id"""
+        pass
 
-	def do_show(self, arg):
-		'''Print string rep of an instance
+    def do_destroy(self, args):
+        """ """
+        pass
 
-		   Usage: show <classname> <id>
-		'''
-		argv = HBNBCommand.parse(arg)
-		if HBNBCommand.checkargs(2, argv):
-			## search database for instance
-			print("show: to be implemented")
-			pass
+    def do_EOF(self, args):
+        """Type \"EOF\" to exit console via EOF"""
+        raise SystemExit
 
-	def do_destroy(self, arg):
-		'''Delete an instance
+    def help_emptyline(self):
+        print("Nothing will happen if you press enter without typing something")
 
-		   Usage: delete <classname> <id>
-		'''
-		argv = HBNBCommand.parse(arg)
-		if HBNBCommand.checkargs(2, argv):
-			## delete instance from database
-			print("destroy: to be implemented")
-			pass
+    def help_help(self):
+        """documentation for help"""
+        print("type \"help\" followed by the command")
 
-	def do_all(self, arg):
-		'''Show all instances
+    def do_quit(self, args):
+        """Typing \"quit\" will exit console\n See also \"help EOF\" """
+        raise SystemExit
 
-		   Usage: all | all <classname>
-		'''
-		argv = HBNBCommand.parse(arg)
-		if len(argv) == 1:
-			valid = HBNBCommand.checkargs(1, argv)
-		else:
-			valid = 1
-		if valid:
-			# print everything of specific class
-			# or print everything of all classes
-			print("all: to be implemented")
-			pass
+    def do_show(self, args):
+        """"""
+        pass
 
-	def do_EOF(self, arg):
-		'''Represents end of file'''
-		return True
-
-	def do_quit(self, arg):
-		'''Quit command to exit the program'''
-		return True
-
-	def emptyline(self):
-		pass
-
-	@staticmethod
-	def checkargs(argc, argv):
-		'''Ensures arguments are valid
-
-			Args:
-				argc = amount of args expected
-				argv = list of args
-
-		   Returns:
-		   		0 for failure, 1 for success
-		'''
-		if argc >= 1:
-			if len(argv) == 0:
-				print("** class name missing **")
-				return 0
-
-			classes = ('BaseModel', 'User', 'State'
-						'City', 'Amenity', 'Place',
-						'Review')
-
-			if argv[0] not in classes:
-				print("** class doesn't exist **")
-				return 0
-
-		if argc >= 2:
-			if len(argv) == 1:
-				print("** instance id missing **")
-				return 0
-			# search for instance, and report
-			# ** no instance found **
-
-		if argc >= 3:
-			if len(argv) == 2:
-				print("** attribute name missing **")
-				return 0
-
-			if len(argv) == 3:
-				print("** value missing **")
-				return 0
-		return 1
-
-	@staticmethod
-	def parse(arg):
-		'''Convert string into list of arguments'''
-		return tuple(shlex.split(arg))
-
+    def do_update(self, args):
+        """"""
+        pass
 
 if __name__ == '__main__':
-	HBNBCommand().cmdloop()
+    prompt = HBNBCommand()
+    prompt.cmdloop()
