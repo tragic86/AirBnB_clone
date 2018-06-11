@@ -1,47 +1,46 @@
-"""File Storage Module
-
-   This modules will allow us to 
-   preserve our class instances into a data store
-"""
+#!/usr/bin/python3
+from models.base_model import BaseModel
 import json
 
+"""File Storage Module
+   This modules will allow us to
+   preserve our class instances into a data store
+"""
+
+
 class FileStorage:
-	"""Class which stores and restores objects with file"""
-	__file_path = "file.json"
-	__objects = {}
+    """handles serialization and deserialization of BaseModel class objects"""
+    __file_path = "file.json"
+    __objects = {}
 
-	def __init__(self):
-		try:
-			with open(FileStorage.__file_path, mode='r', encoding='utf-8') as f:
-				print("made it: {}".format(FileStorage.__file_path))
-		except (FileNotFoundError):
-			with open(FileStorage.__file_path, mode='w', encoding='utf-8') as f:
-				json.dump([], f)
+    def reload(self):
+        """ returns the dictionary __objects
+        try/except with file not found error -> pass
+        """
+        try:
+            with open(self.__file_path, 'r') as f:
+                dicts = json.load(f)
+            for key, value in dicts.items():
+                obj1 = eval(value['__class__']) (**value)
+                self.__objects[key] = obj1
+        except FileNotFoundError:
+            pass
 
-	def reload(self):
-		"""Deserializes from file to __objects"""
-		obj_dicts = []
-		with open(FileStorage.__file_path, mode='r', encoding='utf-8') as f:
-			obj_dicts = json.load(f)
-		for obj in obj_dicts:
-			uuid = obj['id']
-			cname = obj['__class__']
-			self.__objects[uuid+'.'+cname] = eval(cname)(**obj)
+    def all(self):
+        """ sets in __objects the obj with key <obj class name>.id """
+        return self.__objects
 
-	def all(self):
-		"""Returns __objects"""
-		return self.__objects
+    def save(self):
+        """ serializes __objects to the JSON file (path: __file_path) """
+        new_dict = {}
+        if (self.__objects):
+            for key, value in self.__objects.items():
+                new_dict[key] = value.to_dict()
+            with open(self.__file_path, 'w+') as f:
+                json.dump(new_dict, f)
 
-	def save(self):
-		"""Serializes objects to file"""
-		obj_dicts = []
-		for k, v in self.__objects.items():
-			obj_dicts.append(v.to_dict)
-		with open(FileStorage.__file_path, mode='w', encoding='utf-8') as f:
-			json.dump(obj_dicts, f)
-
-	def new(self, obj):
-		"""Adds obj to __objects"""
-		uuid = obj.id
-		cname = obj.__class__.__name__
-		self.__objects[uuid+'.'+cname] = obj
+    def new(self, obj):
+        """ deserializes the JSON file to __objects (only if the JSON file
+        exists ; otherwise, do nothing) """
+        new_key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        self.__objects[new_key] = obj
