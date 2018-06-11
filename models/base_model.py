@@ -3,7 +3,7 @@
  """
 import datetime
 import json
-import models.engine
+import models
 import uuid
 
 class BaseModel:
@@ -17,6 +17,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            models.storage.new(self)
 
         else:
             for key, value in kwargs.items():
@@ -26,7 +27,6 @@ class BaseModel:
                     pass
                 else:
                     setattr(self, key, value)
-
 
     def to_dict(self):
         """adjust format used by dict to use a string form of datetime with
@@ -46,3 +46,18 @@ class BaseModel:
     def save(self):
         """update updated_at time and date"""
         self.updated_at = datetime.datetime.now()
+        models.storage.save()
+
+    def update(self):
+        """updates"""
+        if not (kwargs):
+            pass
+
+        else:
+            for key, value in kwargs.items():
+                if key == "updated_at" or key == "created_at":
+                    value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key == "__class__":
+                    pass
+                else:
+                    setattr(self, key, value)
