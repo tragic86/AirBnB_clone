@@ -34,9 +34,7 @@ class FileStorage:
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
         new_dict = {}
-        if not (self.__objects):
-            pass
-        else:
+        if (self.__objects):
             for key, value in self.__objects.items():
                 new_dict[key] = value.to_dict()
             with open(self.__file_path, 'w+') as f:
