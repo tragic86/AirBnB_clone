@@ -7,10 +7,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """print all string representation of all instances based on
         or not on the clas name"""
-
-    def do_cmd(self, args):
-        """type \"help\" followed by a command for more info"""
-        pass
+        
 
     def do_create(self, args):
         """Usage: (hbnb) create BaseModel
@@ -25,6 +22,9 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, args):
         """Type \"EOF\" to exit console via EOF"""
         raise SystemExit
+
+    def help_cmd(self, args):
+        print("type \"help\" followed by a command for more info")
 
     def help_emptyline(self):
         print("Nothing will happen if you press enter without typing something")
@@ -44,7 +44,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_update(self, args):
-        """Updates an instance based on the class name and id by adding
+        """update <class name> <id> <attribute name> /"<attribute value>/"
+        Updates an instance based on the class name and id by adding
         or updating attribute (save the change into the JSON file)"""
         pass
 
