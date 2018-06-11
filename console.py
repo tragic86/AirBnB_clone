@@ -18,7 +18,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_destroy(self, args):
-        """ """
+        """Deletes an instance based on the class name and id
+        (save the change into the JSON file)"""
         pass
 
     def do_EOF(self, args):
@@ -37,11 +38,14 @@ class HBNBCommand(cmd.Cmd):
         raise SystemExit
 
     def do_show(self, args):
-        """"""
+        """Usage: (hbnb) show BaseModel 1234-1234-1234
+        Prints the string representation of an instance based on
+        the class name and id."""
         pass
 
     def do_update(self, args):
-        """"""
+        """Updates an instance based on the class name and id by adding
+        or updating attribute (save the change into the JSON file)"""
         pass
 
 if __name__ == '__main__':
