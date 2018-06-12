@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 """ Base module for Holberton BnB
  """
-import datetime
+from datetime import datetime
 import json
 import uuid
 import models.engine
+
 
 class BaseModel:
     """initializes the Base method
@@ -15,18 +16,17 @@ class BaseModel:
         """init method for base_model"""
         if not (kwargs):
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.datetime.now()
-            self.updated_at = datetime.datetime.now()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
         else:
             for key, value in kwargs.items():
                 if key == "updated_at" or key == "created_at":
-                    value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                    value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
                 if key == "__class__":
                     pass
                 else:
                     setattr(self, key, value)
-
 
     def to_dict(self):
         """adjust format used by dict to use a string form of datetime with
@@ -40,9 +40,9 @@ class BaseModel:
     def __str__(self):
         """override the string displayed by __str__ method"""
         return("[{}] ({}) {}".format
-                (self.__class__.__name__, self.id,
-                 self.__dict__))
+               (self.__class__.__name__, self.id,
+                self.__dict__))
 
     def save(self):
         """update updated_at time and date"""
-        self.updated_at = datetime.datetime.now()
+        self.updated_at = datetime.now()
