@@ -57,7 +57,6 @@ class HBNBCommand(cmd.Cmd):
             instance = allobjs[argv[0]+'.'+argv[1]]
             instance.update(**{argv[2]: argv[3]})
             instance.save()
-            # print(instance)
 
     def do_destroy(self, arg):
         '''Delete an instance
@@ -154,7 +153,6 @@ class HBNBCommand(cmd.Cmd):
     def parse(arg):
         '''Convert string into list of arguments'''
         return tuple(shlex.split(arg))
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

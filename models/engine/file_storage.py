@@ -6,14 +6,12 @@ from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
-
 import json
 
 """File Storage Module
    This modules will allow us to
    preserve our class instances into a data store
 """
-
 
 class FileStorage:
     """handles serialization and deserialization of BaseModel class objects"""
