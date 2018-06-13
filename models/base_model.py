@@ -3,8 +3,8 @@
  """
 from datetime import datetime
 import json
+import models
 import uuid
-import models.engine
 
 
 class BaseModel:
@@ -18,7 +18,8 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-
+            models.storage.new(self)
+            
         else:
             for key, value in kwargs.items():
                 if key == "updated_at" or key == "created_at":
@@ -32,10 +33,11 @@ class BaseModel:
         """adjust format used by dict to use a string form of datetime with
         isoformat, add class = class name
         """
-        self.__dict__['updated_at'] = str(self.updated_at.isoformat())
-        self.__dict__['created_at'] = str(self.created_at.isoformat())
-        self.__dict__['__class__'] = self.__class__.__name__
-        return self.__dict__
+        dict2 = dict(self.__dict__)
+        dict2['updated_at'] = str(self.updated_at.isoformat())
+        dict2['created_at'] = str(self.created_at.isoformat())
+        dict2['__class__'] = self.__class__.__name__
+        return dict2
 
     def __str__(self):
         """override the string displayed by __str__ method"""
@@ -43,6 +45,26 @@ class BaseModel:
                (self.__class__.__name__, self.id,
                 self.__dict__))
 
+    def __repr__(self):
+        return str(self)
+
     def save(self):
         """update updated_at time and date"""
+
         self.updated_at = datetime.now()
+        models.storage.save()
+
+    def update(self, **kwargs):
+        """updates"""
+        if not (kwargs):
+            pass
+
+        else:
+            for key, value in kwargs.items():
+                if key == "updated_at" or key == "created_at":
+                    value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key == "__class__":
+                    pass
+                else:
+                    setattr(self, key, value)
+#        self.updated_at = datetime.now()

@@ -1,13 +1,17 @@
 #!/usr/bin/python3
 from models.base_model import BaseModel
+from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 import json
 
 """File Storage Module
-
    This modules will allow us to
    preserve our class instances into a data store
 """
-
 
 class FileStorage:
     """handles serialization and deserialization of BaseModel class objects"""
@@ -22,7 +26,7 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 dicts = json.load(f)
             for key, value in dicts.items():
-                obj1 = eval(value['__class__'])(**value)
+                obj1 = eval(value['__class__']) (**value)
                 self.__objects[key] = obj1
         except FileNotFoundError:
             pass

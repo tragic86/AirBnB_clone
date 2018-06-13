@@ -4,7 +4,14 @@ import cmd
 import sys
 import shlex
 from models.base_model import BaseModel
-from models.engine import storage
+from models.user import User
+from models import storage
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -24,7 +31,9 @@ class HBNBCommand(cmd.Cmd):
         if HBNBCommand.checkargs(1, argv):
             constructor = argv[0] + '()'
             instance = eval(constructor)
-            print(instance)
+            storage.new(instance)
+            instance.save()
+            print(instance.id)
 
     def do_show(self, arg):
         '''Print string rep of an instance
@@ -33,9 +42,21 @@ class HBNBCommand(cmd.Cmd):
         '''
         argv = HBNBCommand.parse(arg)
         if HBNBCommand.checkargs(2, argv):
-            # search database for instance
-            print("show: to be implemented")
-            pass
+            allobjs = storage.all()
+            instance = allobjs[argv[0]+'.'+argv[1]]
+            print(instance)
+
+    def do_update(self, arg):
+        ''' Update an instance
+
+        Usage: update <classname> <id> <dict>
+        '''
+        argv = HBNBCommand.parse(arg)
+        if HBNBCommand.checkargs(2, argv):
+            allobjs = storage.all()
+            instance = allobjs[argv[0]+'.'+argv[1]]
+            instance.update(**{argv[2]: argv[3]})
+            instance.save()
 
     def do_destroy(self, arg):
         '''Delete an instance
@@ -45,8 +66,9 @@ class HBNBCommand(cmd.Cmd):
         argv = HBNBCommand.parse(arg)
         if HBNBCommand.checkargs(2, argv):
             # delete instance from database
-            print("destroy: to be implemented")
-            pass
+            allobjs = storage.all()
+            del allobjs[argv[0]+'.'+argv[1]]
+            storage.save()
 
     def do_all(self, arg):
         '''Show all instances
@@ -54,15 +76,23 @@ class HBNBCommand(cmd.Cmd):
         Usage: all | all <classname>
         '''
         argv = HBNBCommand.parse(arg)
+        classname = False
         if len(argv) == 1:
             valid = HBNBCommand.checkargs(1, argv)
+            classname = True
         else:
             valid = 1
-            if valid:
-                # print everything of specific class
-                # or print everything of all classes
-                print("all: to be implemented")
-                pass
+
+        if valid:
+            # print everything of specific class
+            # or print everything of all classes
+            allobjs = storage.all()
+            toprint = []
+            for k, obj in allobjs.items():
+                if classname and (obj.to_dict()['__class__'] != argv[0]):
+                    continue
+                toprint.append(obj)
+                print(toprint)
 
     def do_EOF(self, arg):
         '''Represents end of file'''
@@ -91,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** class name missing **")
                 return 0
 
-            classes = ('BaseModel', 'User', 'State'
+            classes = ('BaseModel', 'User', 'State',
                        'City', 'Amenity', 'Place',
                        'Review')
 
@@ -103,8 +133,11 @@ class HBNBCommand(cmd.Cmd):
             if len(argv) == 1:
                 print("** instance id missing **")
                 return 0
-                # search for instance, and report
-                # ** no instance found **
+
+            allobjs = storage.all()
+            if str(argv[0] + '.'+argv[1]) not in allobjs:
+                print("** no instance found **")
+                return 0
 
         if argc >= 3:
             if len(argv) == 2:
@@ -114,13 +147,12 @@ class HBNBCommand(cmd.Cmd):
             if len(argv) == 3:
                 print("** value missing **")
                 return 0
-            return 1
+        return 1
 
     @staticmethod
     def parse(arg):
         '''Convert string into list of arguments'''
         return tuple(shlex.split(arg))
 
-
 if __name__ == '__main__':
-	HBNBCommand().cmdloop()
+    HBNBCommand().cmdloop()
