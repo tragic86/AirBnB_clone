@@ -13,6 +13,7 @@ import json
    preserve our class instances into a data store
 """
 
+
 class FileStorage:
     """handles serialization and deserialization of BaseModel class objects"""
     __file_path = "file.json"
@@ -26,7 +27,7 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 dicts = json.load(f)
             for key, value in dicts.items():
-                obj1 = eval(value['__class__']) (**value)
+                obj1 = eval(value['__class__'])(**value)
                 self.__objects[key] = obj1
         except FileNotFoundError:
             pass
