@@ -3,6 +3,7 @@
 """
 from models.base_model import BaseModel
 
+
 class Amenity(BaseModel):
     """class structure for Amenity class"""
-	name = ""
+    name = ""
