@@ -154,5 +154,6 @@ class HBNBCommand(cmd.Cmd):
         '''Convert string into list of arguments'''
         return tuple(shlex.split(arg))
 
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
